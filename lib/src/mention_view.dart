@@ -50,6 +50,7 @@ class FlutterMentions extends StatefulWidget {
     this.appendSpaceOnAdd = true,
     this.hideSuggestionList = false,
     this.onSuggestionVisibleChanged,
+    this.suggestionListPadding
   }) : super(key: key);
 
   final bool hideSuggestionList;
@@ -240,6 +241,8 @@ class FlutterMentions extends StatefulWidget {
   /// {@macro flutter.widgets.editableText.autofillHints}
   /// {@macro flutter.services.autofill.autofillHints}
   final Iterable<String>? autofillHints;
+
+  final EdgeInsets? suggestionListPadding;
 
   @override
   FlutterMentionsState createState() => FlutterMentionsState();
@@ -472,29 +475,32 @@ class FlutterMentionsState extends State<FlutterMentions> {
         childAnchor: widget.suggestionPosition == SuggestionPosition.Bottom
             ? Alignment.bottomCenter
             : Alignment.topCenter,
-        portal: ValueListenableBuilder(
-          valueListenable: showSuggestions,
-          builder: (BuildContext context, bool show, Widget? child) {
-            return show && !widget.hideSuggestionList
-                ? OptionList(
-                    suggestionListHeight: widget.suggestionListHeight,
-                    suggestionBuilder: list.suggestionBuilder,
-                    suggestionListDecoration: widget.suggestionListDecoration,
-                    data: list.data.where((element) {
-                      final ele = element['display'].toLowerCase();
-                      final str = _selectedMention!.str
-                          .toLowerCase()
-                          .replaceAll(RegExp(_pattern), '');
-
-                      return ele == str ? false : ele.contains(str);
-                    }).toList(),
-                    onTap: (value) {
-                      addMention(value, list);
-                      showSuggestions.value = false;
-                    },
-                  )
-                : Container();
-          },
+        portal: Padding(
+          padding: widget.suggestionListPadding ?? EdgeInsets.zero,
+          child: ValueListenableBuilder(
+            valueListenable: showSuggestions,
+            builder: (BuildContext context, bool show, Widget? child) {
+              return show && !widget.hideSuggestionList
+                  ? OptionList(
+                      suggestionListHeight: widget.suggestionListHeight,
+                      suggestionBuilder: list.suggestionBuilder,
+                      suggestionListDecoration: widget.suggestionListDecoration,
+                      data: list.data.where((element) {
+                        final ele = element['display'].toLowerCase();
+                        final str = _selectedMention!.str
+                            .toLowerCase()
+                            .replaceAll(RegExp(_pattern), '');
+        
+                        return ele == str ? false : ele.contains(str);
+                      }).toList(),
+                      onTap: (value) {
+                        addMention(value, list);
+                        showSuggestions.value = false;
+                      },
+                    )
+                  : Container();
+            },
+          ),
         ),
         child: Row(
           children: [
