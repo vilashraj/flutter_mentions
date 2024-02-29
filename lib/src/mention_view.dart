@@ -50,7 +50,8 @@ class FlutterMentions extends StatefulWidget {
     this.appendSpaceOnAdd = true,
     this.hideSuggestionList = false,
     this.onSuggestionVisibleChanged,
-    this.suggestionListPadding
+    this.suggestionListPadding,
+    this.separatorBuilder
   }) : super(key: key);
 
   final bool hideSuggestionList;
@@ -243,6 +244,8 @@ class FlutterMentions extends StatefulWidget {
   final Iterable<String>? autofillHints;
 
   final EdgeInsets? suggestionListPadding;
+
+  final Widget Function(int index)? separatorBuilder;
 
   @override
   FlutterMentionsState createState() => FlutterMentionsState();
@@ -482,6 +485,7 @@ class FlutterMentionsState extends State<FlutterMentions> {
             builder: (BuildContext context, bool show, Widget? child) {
               return show && !widget.hideSuggestionList
                   ? OptionList(
+                      separatorBuilder: widget.separatorBuilder,
                       suggestionListHeight: widget.suggestionListHeight,
                       suggestionBuilder: list.suggestionBuilder,
                       suggestionListDecoration: widget.suggestionListDecoration,

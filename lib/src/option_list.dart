@@ -7,9 +7,11 @@ class OptionList extends StatelessWidget {
     required this.suggestionListHeight,
     this.suggestionBuilder,
     this.suggestionListDecoration,
+    this.separatorBuilder
   });
 
   final Widget Function(Map<String, dynamic>)? suggestionBuilder;
+  final Widget Function(int index)? separatorBuilder;
 
   final List<Map<String, dynamic>> data;
 
@@ -29,28 +31,36 @@ class OptionList extends StatelessWidget {
               maxHeight: suggestionListHeight,
               minHeight: 0,
             ),
-            child: ListView.builder(
+            child: ListView.separated(
               itemCount: data.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    onTap(data[index]);
-                  },
-                  child: suggestionBuilder != null
-                      ? suggestionBuilder!(data[index])
-                      : Container(
-                          color: Colors.blue,
-                          padding: EdgeInsets.all(20.0),
-                          child: Text(
-                            data[index]['display'],
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        ),
-                );
+                return _buildItem(index);
+              },
+              separatorBuilder: (context, index) {
+                return separatorBuilder?.call(index) ?? Container();
               },
             ),
           )
         : Container();
+  }
+
+  Widget _buildItem(int index){
+    return GestureDetector(
+      onTap: () {
+        onTap(data[index]);
+      },
+      child: suggestionBuilder != null
+          ? suggestionBuilder!(data[index])
+          : Container(
+              color: Colors.blue,
+              padding: EdgeInsets.all(20.0),
+              child: Text(
+                data[index]['display'],
+                style: TextStyle(fontSize: 12),
+              ),
+            ),
+    );
+
   }
 }
