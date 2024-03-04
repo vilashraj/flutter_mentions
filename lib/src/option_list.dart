@@ -7,7 +7,8 @@ class OptionList extends StatelessWidget {
     required this.suggestionListHeight,
     this.suggestionBuilder,
     this.suggestionListDecoration,
-    this.separatorBuilder
+    this.separatorBuilder,
+    this.suggestionListInnerPadding
   });
 
   final Widget Function(Map<String, dynamic>)? suggestionBuilder;
@@ -20,6 +21,7 @@ class OptionList extends StatelessWidget {
   final double suggestionListHeight;
 
   final BoxDecoration? suggestionListDecoration;
+  final EdgeInsets? suggestionListInnerPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class OptionList extends StatelessWidget {
               minHeight: 0,
             ),
             child: ListView.separated(
-              padding: EdgeInsets.symmetric(vertical: 4.0),
+              padding: suggestionListInnerPadding,
               itemCount: data.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
