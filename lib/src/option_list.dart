@@ -32,6 +32,7 @@ class OptionList extends StatelessWidget {
               minHeight: 0,
             ),
             child: ListView.separated(
+              padding: EdgeInsets.symmetric(vertical: 2.0),
               itemCount: data.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
