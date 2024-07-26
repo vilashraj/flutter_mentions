@@ -52,7 +52,8 @@ class FlutterMentions extends StatefulWidget {
     this.onSuggestionVisibleChanged,
     this.suggestionListPadding,
     this.suggestionListInnerPadding,
-    this.separatorBuilder
+    this.separatorBuilder,
+    this.inputFormatters
   }) : super(key: key);
 
   final bool hideSuggestionList;
@@ -246,6 +247,7 @@ class FlutterMentions extends StatefulWidget {
 
   final EdgeInsets? suggestionListPadding;
   final EdgeInsets? suggestionListInnerPadding;
+  final List<TextInputFormatter>? inputFormatters;
 
   final Widget Function(int index)? separatorBuilder;
 
@@ -547,6 +549,7 @@ class FlutterMentionsState extends State<FlutterMentions> {
                 scrollPadding: widget.scrollPadding,
                 scrollPhysics: widget.scrollPhysics,
                 controller: controller,
+                inputFormatters: widget.inputFormatters,
               ),
             ),
             ...widget.trailing,
